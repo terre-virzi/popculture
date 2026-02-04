@@ -15,15 +15,25 @@ load_dotenv()
 
 # Pop culture subreddits - curated for widely-known, funny, mainstream content
 SUBREDDITS = [
-    # Celebrity & gossip (core)
-    "popculturechat",
-    "Fauxmoi",
-    "entertainment",
-    "popheads",
-    "WhitePeopleTwitter",
-    "BlackPeopleTwitter",
-    "nottheonion",
-    "funny",
+  # Tier A: event sources (higher weight)
+  {"name":"entertainment","tier":"A","cap":35,"weight":1.25},
+  {"name":"movies","tier":"A","cap":25,"weight":1.15},
+  {"name":"television","tier":"A","cap":25,"weight":1.15},
+  {"name":"popculturechat","tier":"A","cap":35,"weight":1.20},
+  {"name":"popheads","tier":"A","cap":25,"weight":1.10},
+  {"name":"hiphopheads","tier":"A","cap":20,"weight":1.10},
+  {"name":"boxoffice","tier":"A","cap":15,"weight":1.05},
+  {"name":"LiveFromNewYork","tier":"A","cap":15,"weight":1.05},
+  {"name":"TikTokCringe","tier":"A","cap":20,"weight":1.05},
+
+  # Tier B: reaction validation (lower weight + lower cap)
+  {"name":"BlackPeopleTwitter","tier":"B","cap":12,"weight":0.85},
+  {"name":"WhitePeopleTwitter","tier":"B","cap":12,"weight":0.85},
+  {"name":"memes","tier":"B","cap":12,"weight":0.80},
+  {"name":"me_irl","tier":"B","cap":10,"weight":0.75},
+
+  # Tier C: gossip (very capped)
+  {"name":"Fauxmoi","tier":"C","cap":10,"weight":0.70},
 ]
 
 # Reddit requires a descriptive User-Agent
