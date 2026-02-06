@@ -47,8 +47,9 @@ def scrape_reddit() -> list[dict]:
     cutoff_utc = time.time() - (14 * 24 * 60 * 60)  # 2 weeks ago
 
     for sub in SUBREDDITS:
+        sub_name = sub["name"] if isinstance(sub, dict) else sub
         for sort in ("top", "hot", "rising"):
-            url = f"https://www.reddit.com/r/{sub}/{sort}.json"
+            url = f"https://www.reddit.com/r/{sub_name}/{sort}.json"
             if sort == "top":
                 params = {"t": "month", "limit": 100}
             elif sort == "rising":
@@ -65,7 +66,7 @@ def scrape_reddit() -> list[dict]:
                 r.raise_for_status()
                 data = r.json()
             except Exception as e:
-                print(f"  Failed r/{sub} ({sort}): {e}")
+                print(f"  Failed r/{sub_name} ({sort}): {e}")
                 continue
 
             for child in data.get("data", {}).get("children", []):
@@ -88,7 +89,7 @@ def scrape_reddit() -> list[dict]:
                     "id": pid,
                     "title": title,
                     "selftext": selftext,
-                    "subreddit": sub,
+                    "subreddit": sub_name,
                     "score": post.get("score", 0),
                     "num_comments": post.get("num_comments", 0),
                     "created_utc": post.get("created_utc"),
