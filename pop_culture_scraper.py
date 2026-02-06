@@ -41,10 +41,10 @@ USER_AGENT = "PopCultureScraper/1.0 (Gen Z weekly roundup)"
 
 
 def scrape_reddit() -> list[dict]:
-    """Scrape Reddit for top pop culture posts from the past 2 weeks."""
+    """Scrape Reddit for top pop culture posts from the past 1 week."""
     all_posts: list[dict] = []
     seen_ids: set[str] = set()
-    cutoff_utc = time.time() - (14 * 24 * 60 * 60)  # 2 weeks ago
+    cutoff_utc = time.time() - (7 * 24 * 60 * 60)  # 1 week ago
 
     for sub in SUBREDDITS:
         sub_name = sub["name"] if isinstance(sub, dict) else sub
@@ -83,7 +83,7 @@ def scrape_reddit() -> list[dict]:
 
                 created = post.get("created_utc") or 0
                 if created < cutoff_utc:
-                    continue  # Skip posts older than 2 weeks
+                    continue  # Skip posts older than 1 week
 
                 all_posts.append({
                     "id": pid,
@@ -124,7 +124,7 @@ CRITICAL FILTERING RULES—only include items that pass ALL of these:
 1. **Household-name celebrities only**: Taylor Swift, Beyoncé, Trump, Kanye, Drake, Rihanna, Ariana Grande, Billie Eilish, The Rock, etc. If you said the name in a college classroom, 90%+ of students would know who you mean. EXCLUDE: niche influencers, lesser-known YouTubers, indie artists, reality TV side characters, subreddit-specific drama.
 2. **Widely circulating events**: Must be trending across multiple platforms (TikTok, Instagram, X, news headlines), not just one small community. The event should have broken out of its bubble—if it's only discussed in one subreddit, skip it.
 3. **Joke-understandability test**: Would the majority of a Gen Z audience (18–25) immediately get the reference if someone made a joke about it? If you'd have to explain who the person is or what happened, EXCLUDE IT.
-4. **EXCLUDE entirely—never joke about these**: Celebrity deaths, serious tragedies, illnesses, or losses. We don't make fun of people dying or suffering.
+4. **EXCLUDE entirely—never include these**: Death (celebrities or anyone), serious tragedies, fatal accidents, violence, terminal illness, devastating losses, mass shootings, natural disasters with casualties, suicide, or any topic that would be inappropriate to joke about. If it would make the audience uncomfortable or sad, leave it out. This is for comedy—stick to lighthearted, roastable drama.
 5. **Liberal-aligned comedy**: Do NOT include items that roast celebrities for taking progressive/liberal positions (e.g., condemning ICE, supporting immigrants, speaking out for marginalized groups). We're not punching down. If the joke would make someone look bad for doing the right thing, skip it. It's fine to joke about celebrities' drama or antics—but not about them standing up for human rights. It IS fine—and encouraged—to roast Trump, politicians, power institutions, corporations, and the rich/powerful. Punch up, not down.
 
 CONSOLIDATION: If many posts are about the same event (e.g., the Grammys, a major awards show, a single viral moment), COMBINE them into ONE item. Don't list "Billie at the Grammys," "Bad Bunny at the Grammys," "Nicki at the Grammys" separately—roll them into a single "Grammys 2025" (or whatever year) entry that covers the best moments, drama, and memes from that event. Same for any big shared moment: one consolidated entry per event, not one per celebrity.
@@ -147,7 +147,7 @@ Skip anything obscure, niche, or that requires explanation. Sound like a funny f
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": prompt},
-            {"role": "user", "content": f"Here are the Reddit posts from the past 2 weeks:\n\n{content}"},
+            {"role": "user", "content": f"Here are the Reddit posts from the past 1 week:\n\n{content}"},
         ],
         max_tokens=2500,
     )
@@ -184,7 +184,7 @@ def main():
     summary = get_openai_summary(content)
 
     print("\n" + "=" * 50)
-    print("GEN Z POP CULTURE ROUNDUP (Past 2 Weeks)")
+    print("GEN Z POP CULTURE ROUNDUP (Past Week)")
     print("=" * 50)
     print(summary)
 
